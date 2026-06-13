@@ -1,0 +1,15 @@
+GeoMM-Bench
+Copyright 2026 Synka Labs Inc.
+
+This product includes software developed at Synka Labs Inc.
+
+The source code in this repository is licensed under the Apache License,
+Version 2.0 (see LICENSE).
+
+The benchmark labels, geological interval descriptions, and derived metadata
+in data/ are licensed under Creative Commons Attribution 4.0 International
+(CC BY 4.0).
+
+The original Vilkyciai-22 well log and interpretation rasters are operator-
+provided and are NOT included or redistributed in this repository. They remain
+under the data provider's terms. See LICENSES.md and DATASHEET.md.

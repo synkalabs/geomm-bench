@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+
+# Notebook / OS
+.ipynb_checkpoints/
+.DS_Store
+
+# Local data not for redistribution
+*.pdf
+*.tif
+data/images/

@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: "If you use GeoMM-Bench, please cite both the benchmark software and the paper below."
+title: "GeoMM-Bench: a benchmark for multimodal AI on well log display interpretation"
+type: software
+version: 0.1.0
+authors:
+  - given-names: Martin
+    family-names: Masaba
+    email: martin@synka.ai
+    affiliation: "Synka Labs Inc."
+  - given-names: Mayur
+    family-names: Pal
+    affiliation: "Kaunas University of Technology"
+license: Apache-2.0
+repository-code: "https://github.com/synkalabs/geomm-bench"
+keywords:
+  - benchmark
+  - vision-language models
+  - well log interpretation
+  - lithofacies classification
+  - multimodal AI
+  - petrophysics
+preferred-citation:
+  type: conference-paper
+  title: "Toward Multimodal RAG Agents for Subsurface Characterization: Introducing GeoMM-Bench and Baseline Results"
+  authors:
+    - given-names: Martin
+      family-names: Masaba
+      email: martin@synka.ai
+      affiliation: "Synka Labs Inc."
+    - given-names: Mayur
+      family-names: Pal
+      affiliation: "Kaunas University of Technology"
+  collection-title: "EAGE Annual Conference & Exhibition"
+  year: 2026

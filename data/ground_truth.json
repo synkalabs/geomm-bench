@@ -1,0 +1,135 @@
+{
+  "benchmark": "GeoMM-Bench",
+  "version": "0.1.0",
+  "task": "lithofacies_classification",
+  "description": "Pilot benchmark for evaluating multimodal AI on well log display interpretation.",
+  "well": "Vilkyciai-22",
+  "basin": "Baltic Basin",
+  "country": "Lithuania",
+  "depth_range_m_tvd": [
+    1975,
+    2215
+  ],
+  "scale": "1:500",
+  "classes": [
+    "sandstone",
+    "shale",
+    "limestone",
+    "dolomite"
+  ],
+  "n_intervals": 11,
+  "class_distribution": {
+    "shale": 3,
+    "limestone": 5,
+    "sandstone": 3,
+    "dolomite": 0
+  },
+  "color_code_reference": {
+    "yellow": "quartz (sandstone)",
+    "magenta": "clay (shale)",
+    "green": "calcite (limestone)",
+    "cyan": "dolomite or water-filled porosity"
+  },
+  "notes": "Dolomite is a target class but has no labelled interval in this pilot. Descriptions were synthesised from petrophysical knowledge and visual interpretation of the log displays; expert geological validation is requested. Source log/interpretation PDFs are operator-provided and are NOT redistributed in this release; see DATASHEET.md.",
+  "intervals": [
+    {
+      "id": 1,
+      "start_depth": 1975,
+      "end_depth": 1995,
+      "lithology": "shale",
+      "page": 2,
+      "description": "High gamma ray readings above 100 GAPI indicating clay-rich formation. Mineral model shows dominant clay volume with magenta coloring. Low resistivity and high neutron porosity typical of shale.",
+      "visual_features": "magenta fill, high GR deflection right, low resistivity"
+    },
+    {
+      "id": 2,
+      "start_depth": 1995,
+      "end_depth": 2015,
+      "lithology": "shale",
+      "page": 2,
+      "description": "Continued high gamma ray response. Clay-dominated interval with characteristic shale properties. Density-neutron crossover present.",
+      "visual_features": "magenta fill, hatched pattern, high GR"
+    },
+    {
+      "id": 3,
+      "start_depth": 2015,
+      "end_depth": 2035,
+      "lithology": "limestone",
+      "page": 2,
+      "description": "Sharp decrease in gamma ray to below 30 GAPI. Mineral model shows calcite-dominated composition with green coloring. High density around 2.71 g/cc consistent with limestone matrix.",
+      "visual_features": "green fill, low GR deflection left, high density"
+    },
+    {
+      "id": 4,
+      "start_depth": 2035,
+      "end_depth": 2060,
+      "lithology": "limestone",
+      "page": 3,
+      "description": "Clean carbonate interval with low gamma ray. Calcite cement visible in mineral model. Moderate porosity indicated by density-neutron separation.",
+      "visual_features": "green fill dominant, clean GR baseline"
+    },
+    {
+      "id": 5,
+      "start_depth": 2060,
+      "end_depth": 2085,
+      "lithology": "limestone",
+      "page": 3,
+      "description": "Limestone with minor clay content. Gamma ray slightly elevated but still in carbonate range. Good porosity development.",
+      "visual_features": "green fill with minor magenta, moderate GR"
+    },
+    {
+      "id": 6,
+      "start_depth": 2085,
+      "end_depth": 2110,
+      "lithology": "limestone",
+      "page": 3,
+      "description": "Pure limestone interval. Very low gamma ray and high density. Mineral model shows nearly pure calcite composition.",
+      "visual_features": "solid green fill, very low GR, high density track"
+    },
+    {
+      "id": 7,
+      "start_depth": 2110,
+      "end_depth": 2125,
+      "lithology": "limestone",
+      "page": 3,
+      "description": "Transition zone at base of carbonate sequence. Limestone with increasing siliciclastic content toward base.",
+      "visual_features": "green fill transitioning, GR slightly increasing"
+    },
+    {
+      "id": 8,
+      "start_depth": 2125,
+      "end_depth": 2145,
+      "lithology": "sandstone",
+      "page": 3,
+      "description": "Quartz-rich sandstone with low gamma ray. Mineral model shows yellow coloring indicating sand/quartz dominance. Good porosity.",
+      "visual_features": "yellow fill, low GR, cyan water saturation"
+    },
+    {
+      "id": 9,
+      "start_depth": 2145,
+      "end_depth": 2170,
+      "lithology": "sandstone",
+      "page": 4,
+      "description": "Clean sandstone reservoir interval. Very low gamma ray below 20 GAPI. High porosity visible in density-neutron overlay. Potential hydrocarbon zone.",
+      "visual_features": "yellow fill dominant, very low GR, high porosity indication"
+    },
+    {
+      "id": 10,
+      "start_depth": 2170,
+      "end_depth": 2195,
+      "lithology": "sandstone",
+      "page": 4,
+      "description": "Continued sand development with excellent reservoir properties. Uniform low gamma ray signature throughout interval.",
+      "visual_features": "yellow fill, consistent low GR, good porosity"
+    },
+    {
+      "id": 11,
+      "start_depth": 2195,
+      "end_depth": 2215,
+      "lithology": "shale",
+      "page": 4,
+      "description": "Return to shale facies. Gamma ray increases sharply above 80 GAPI. Clay volume dominates mineral model. Base of reservoir section.",
+      "visual_features": "magenta fill returns, GR spike right, low resistivity"
+    }
+  ]
+}
