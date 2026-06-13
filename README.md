@@ -79,12 +79,12 @@ displays can regenerate the exact interval crops.
 ## Citation
 
 ```bibtex
-@inproceedings{masaba2026geommbench,
-  title     = {Toward Multimodal RAG Agents for Subsurface Characterization:
-               Introducing GeoMM-Bench and Baseline Results},
-  author    = {Masaba, Martin and Pal, Mayur},
-  booktitle = {EAGE Annual Conference & Exhibition},
-  year      = {2026}
+@misc{masaba2026geommbench,
+  title  = {Toward Multimodal RAG Agents for Subsurface Characterization:
+            Introducing GeoMM-Bench and Baseline Results},
+  author = {Masaba, Martin and Pal, Mayur},
+  note   = {Preprint; venue to be determined},
+  year   = {2026}
 }
 ```
 

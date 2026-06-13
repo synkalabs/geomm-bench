@@ -21,7 +21,7 @@ keywords:
   - multimodal AI
   - petrophysics
 preferred-citation:
-  type: conference-paper
+  type: unpublished
   title: "Toward Multimodal RAG Agents for Subsurface Characterization: Introducing GeoMM-Bench and Baseline Results"
   authors:
     - given-names: Martin
@@ -31,5 +31,5 @@ preferred-citation:
     - given-names: Mayur
       family-names: Pal
       affiliation: "Kaunas University of Technology"
-  collection-title: "EAGE Annual Conference & Exhibition"
   year: 2026
+  notes: "Preprint; venue to be determined"
