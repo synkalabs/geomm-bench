@@ -3,15 +3,43 @@
   "version": "0.1.0",
   "well": "Vilkyciai-22",
   "n_intervals": 11,
-  "classes": ["sandstone", "shale", "limestone", "dolomite"],
+  "classes": [
+    "sandstone",
+    "shale",
+    "limestone",
+    "dolomite"
+  ],
   "metric": "macro_f1_present_classes",
   "device_note": "Reported on Apple Silicon MPS, float32, open_clip ViT-B-32 laion2b_s34b_b79k.",
   "results": {
-    "text_only_clip":   {"macro_f1": 0.886, "accuracy": 0.909, "note": "CLIP text embedding of description vs class prompts."},
-    "vision_only_clip": {"macro_f1": 0.620, "accuracy": null,  "note": "CLIP image embedding vs visual class prompts. -26.6 pp vs text."},
-    "visual_grounding_dino": {"macro_f1": 0.071, "accuracy": 0.091, "note": "grounding-dino-tiny, thresholds 0.15. Below random (0.25)."},
-    "multimodal_vqa_blip2":  {"macro_f1": null, "accuracy": 0.182, "note": "blip2-opt-2.7b. Degenerate: predicts sandstone."}
+    "text_only_clip": {
+      "macro_f1": 0.886,
+      "accuracy": 0.909,
+      "note": "CLIP text embedding of description vs class prompts."
+    },
+    "vision_only_clip": {
+      "macro_f1": 0.62,
+      "accuracy": null,
+      "note": "CLIP image embedding vs visual class prompts. -26.6 pp vs text."
+    },
+    "visual_grounding_dino": {
+      "macro_f1": 0.071,
+      "accuracy": 0.091,
+      "note": "grounding-dino-tiny, thresholds 0.15. Below random (0.25)."
+    },
+    "multimodal_vqa_blip2": {
+      "macro_f1": null,
+      "accuracy": 0.182,
+      "note": "blip2-opt-2.7b. Degenerate: predicts sandstone."
+    },
+    "multimodal_fusion_clip": {
+      "macro_f1": null,
+      "accuracy": null,
+      "note": "CLIP 0.6/0.4 text-vision fusion. Does not exceed text-only baseline (see paper Sec. Results). Exact value to be filled from your run."
+    }
   },
-  "baselines": {"random_four_class_f1": 0.25},
+  "baselines": {
+    "random_four_class_f1": 0.25
+  },
   "provenance": "Real runs; see ade_experiment_results.json in the original experiment logs for the cross-check of text 0.886 / vision 0.620 / dino 0.071."
 }

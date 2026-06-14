@@ -2,6 +2,7 @@ torch>=2.0
 open-clip-torch>=2.20
 Pillow>=9.0
 numpy>=1.23
+matplotlib>=3.6
 # Vision approaches (optional):
 pdf2image>=1.16
 # Grounding DINO and BLIP-2 (optional):
