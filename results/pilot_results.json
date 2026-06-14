@@ -19,7 +19,7 @@
     },
     "vision_only_clip": {
       "macro_f1": 0.62,
-      "accuracy": null,
+      "accuracy": 0.636,
       "note": "CLIP image embedding vs visual class prompts. -26.6 pp vs text."
     },
     "visual_grounding_dino": {
@@ -28,18 +28,18 @@
       "note": "grounding-dino-tiny, thresholds 0.15. Below random (0.25)."
     },
     "multimodal_vqa_blip2": {
-      "macro_f1": null,
-      "accuracy": 0.182,
-      "note": "blip2-opt-2.7b. Degenerate: predicts sandstone."
+      "macro_f1": 0.143,
+      "accuracy": 0.273,
+      "note": "blip2-opt-2.7b. Degenerate: predicts sandstone for all intervals."
     },
     "multimodal_fusion_clip": {
-      "macro_f1": null,
-      "accuracy": null,
-      "note": "CLIP 0.6/0.4 text-vision fusion. Does not exceed text-only baseline (see paper Sec. Results). Exact value to be filled from your run."
+      "macro_f1": 0.886,
+      "accuracy": 0.909,
+      "note": "CLIP 0.6/0.4 text-vision fusion. Ties text-only; does not exceed it."
     }
   },
   "baselines": {
     "random_four_class_f1": 0.25
   },
-  "provenance": "Real runs; see ade_experiment_results.json in the original experiment logs for the cross-check of text 0.886 / vision 0.620 / dino 0.071."
+  "provenance": "Real runs from GeoMM_Bench_Complete_Evaluation.ipynb (open_clip ViT-B-32 laion2b_s34b_b79k). Text-only and CLIP fusion 0.886/0.909; vision-only 0.620/0.636; Grounding DINO 0.071/0.091; BLIP-2 0.143/0.273. Text-only is independently reproducible via scripts/run_evaluation.py; vision/grounding/BLIP-2/fusion additionally require the operator source PDF (see DATASHEET.md)."
 }

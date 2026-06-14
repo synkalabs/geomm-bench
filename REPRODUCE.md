@@ -15,6 +15,11 @@ Text-only (no imagery; downloads CLIP weights on first run):
 python scripts/run_evaluation.py --approaches text_only --out results/reproduced_results.json
 ```
 
+To verify the text-only result matches the reported pilot numbers exactly:
+```bash
+python scripts/check_reproduction.py   # asserts macro-F1 0.886 / accuracy 0.909
+```
+
 All approaches (needs the source log PDF; see DATASHEET.md on availability):
 ```bash
 python scripts/run_evaluation.py \
@@ -24,7 +29,8 @@ python scripts/run_evaluation.py \
 ```
 
 Expected (pilot, n=11): text-only macro-F1 0.886 / accuracy 0.909;
-vision-only CLIP 0.620; Grounding DINO 0.071 / 0.091; BLIP-2 accuracy 0.182.
+vision-only CLIP 0.620 / 0.636; Grounding DINO 0.071 / 0.091;
+BLIP-2 0.143 / 0.273; CLIP fusion 0.886 / 0.909 (ties text-only).
 
 ## 3. Regenerate the figures (from the numbers)
 
