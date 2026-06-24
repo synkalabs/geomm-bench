@@ -1,6 +1,6 @@
 # GeoMM-Bench
 
-> To reproduce: see **EXPERIMENT.md** (one runner, one results file).
+> To reproduce: see **EXPERIMENT.md** — one unified notebook or CLI runner, one results file.
 
 A benchmark for evaluating multimodal AI on **well log display interpretation**.
 
@@ -10,23 +10,32 @@ interpretations — rather than pre-digitised numerical curves. The pilot evalua
 lithofacies classification and documents a large gap between text-based and
 vision-based performance.
 
-> **Status: v0.1 pilot.** One well (Vilkyciai-22), 11 labelled intervals, four
-> lithofacies. Results establish the existence and approximate magnitude of the
-> text–vision gap, not precise population estimates. A FORCE 2020-based expansion
-> with well-level splits and confidence intervals is planned for v0.2.
+> **Status: v0.2 pilot.** One well (Vilkyciai-22), 11 labelled intervals, four
+> lithofacies, evaluated under two CLIP backbones (probes A and B). Results
+> establish the existence and approximate magnitude of the text–vision gap, not
+> precise population estimates. A FORCE 2020-based expansion with well-level
+> splits and confidence intervals is planned next.
 
 ## Results (pilot, n = 11)
 
-| Approach | Model | Macro-F1 | Accuracy |
-|---|---|---|---|
-| Text-only | CLIP ViT-B/32 (text) | **0.886** | 90.9% |
-| Vision-only | CLIP ViT-B/32 (image) | 0.620 | — |
-| Visual grounding | Grounding DINO tiny | 0.071 | 9.1% |
-| Multimodal VQA | BLIP-2 OPT-2.7B | — | 18.2% |
-| Random baseline | — | 0.25 | 25% |
+The finding holds across model families *and* input configurations: only text
+succeeds; every off-the-shelf vision, grounding, VQA, multimodal, and
+added-modality approach fails, and adding Full Wave Sonic makes it worse, not
+better. The bottleneck is the visual representation, not the data.
 
-Text descriptions classify well; off-the-shelf vision encoders fail, and
-multimodal fusion does not recover the lost signal. See `results/pilot_results.json`.
+| Approach | Macro-F1 | Accuracy |
+|---|---|---|
+| Text-Only (CLIP) | **0.746** | 72.7% |
+| Vision-Only (CLIP) | 0.091 | 18.2% |
+| Vision-Only (Grounding DINO) | n/a | n/a |
+| Multimodal (BLIP-2) | 0.343 | 36.4% |
+| Multimodal (CLIP Fusion) | 0.103 | 18.2% |
+| Random baseline | 0.25 | 25% |
+
+Two CLIP backbones (probes A and B) are evaluated and reported separately, never
+merged — see **EXPERIMENT.md**. Numbers above are from
+`results/geomm_bench_results.json` and are reproduced by
+`images/Figure2_Results_Comparison.png`.
 
 ## Install
 
@@ -41,37 +50,48 @@ rasterize source displays.
 
 ## Reproduce
 
-Text-only (no imagery required — downloads CLIP weights on first run):
+See **EXPERIMENT.md** for the full guide. Two equivalent entry points — the
+unified notebook `GeoMM-Bench_Experiment.ipynb` or the CLI runner below — call
+the same package code and write the same results file.
+
+Text-only sanity check (no imagery; downloads CLIP weights on first run):
 
 ```bash
 python run_geomm_bench.py --probe A --out results/text_only.json
 ```
 
-Vision approaches (require the source log PDF; see `DATASHEET.md` on availability):
+Both probes (require the source PDFs; see `DATASHEET.md` on availability):
 
 ```bash
-python run_geomm_bench.py \
-    --approaches text_only vision_clip fusion \
-    --logs-pdf path/to/vilkyciai22_logs500.pdf
+python run_geomm_bench.py --probe both \
+    --logs-pdf path/to/vilkyciai22_logs500.pdf \
+    --fws-pdf  path/to/vilkyciai22_fws_im_dt.pdf \
+    --out results/geomm_bench_results.json
 ```
 
-Optional heavy models:
+Then regenerate the figure from the results file (it cannot drift):
 
 ```bash
-python run_geomm_bench.py --approaches grounding_dino blip2 \
-    --logs-pdf path/to/vilkyciai22_logs500.pdf
+python scripts/make_results_figure.py \
+    --results results/geomm_bench_results.json \
+    --out images/Figure2_Results_Comparison.png   # --probe A|B selects the probe
 ```
 
 ## What's in this release
 
 ```
-data/ground_truth.json      11 labelled intervals: depth, label, description, visual features
-geomm_bench/baselines.py    CLIP text/vision/fusion, exact prompts, crop calibration constants
-geomm_bench/optional_models.py  Grounding DINO + BLIP-2
-geomm_bench/metrics.py      macro-F1, per-class P/R/F1, accuracy
-run_geomm_bench.py   CLI runner (two probes)
-results/geomm_bench_results.json  Reported pilot numbers
-DATASHEET.md                Dataset documentation (composition, collection, distribution)
+GeoMM-Bench_Experiment.ipynb    unified notebook (both probes)  — or —
+run_geomm_bench.py              CLI runner (both probes)
+EXPERIMENT.md                   how to reproduce (single source of truth)
+data/ground_truth.json          11 labelled intervals: depth, label, description, visual features
+geomm_bench/constants.py        lithology class set (torch-free)
+geomm_bench/baselines.py        CLIP text/vision/fusion, exact prompts, crop calibration (Probe A)
+geomm_bench/fws_probe.py        multi-image logs+FWS classifier (Probe B)
+geomm_bench/optional_models.py  Grounding DINO + BLIP-2 (Probe A)
+geomm_bench/metrics.py          macro-F1, per-class P/R/F1, accuracy
+scripts/make_results_figure.py  Figure 2, plotted from the results file
+results/geomm_bench_results.json  reported pilot numbers
+DATASHEET.md                    dataset documentation (composition, collection, distribution)
 ```
 
 The operator-provided source log rasters are **not** redistributed here (see
