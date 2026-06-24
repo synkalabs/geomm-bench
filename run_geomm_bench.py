@@ -108,7 +108,7 @@ def run(approaches, gt, log_pages=None, fws_pages=None):
 def build_doc(gt, log_pages=None, fws_pages=None, approaches=ALL_APPROACHES, sensitivity=True):
     """Assemble the full results document (primary results + sensitivity block)."""
     doc = {
-        "benchmark": "GeoMM-Bench", "version": "0.2.0", "well": "Vilkyciai-22",
+        "benchmark": "GeoMM-Bench", "version": "0.1.0", "well": "Vilkyciai-22",
         "n_intervals": len(gt), "backbone": BACKBONE,
         "metric": "macro_f1_present_classes",
         "results": run(approaches, gt, log_pages, fws_pages),

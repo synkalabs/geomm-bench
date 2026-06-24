@@ -33,10 +33,10 @@ text-only and vision-CLIP under open-clip/LAION and writes a
 | macro-F1 | OpenAI CLIP | open-clip / LAION |
 |---|---|---|
 | `text_only` | 0.726 | 0.726 |
-| `vision_clip` | — (needs PDFs) | — (needs PDFs) |
+| `vision_clip` | 0.278 | 0.578 |
 
-Text-only is the same on both backbones; vision-CLIP is not — earlier runs put it
-near 0.09 on OpenAI CLIP and around 0.62 on LAION. That is why both are reported
+Text-only is the same on both backbones; vision-CLIP roughly doubles (0.278 →
+0.578) just by changing the pretraining corpus. That is why both are reported
 instead of picking one. The LAION backbone needs `open-clip-torch`; without it,
 only the OpenAI row is scored.
 
@@ -63,9 +63,10 @@ python scripts/make_results_figure.py \
   --out images/Figure2_Results_Comparison.png
 ```
 
-The committed `results/geomm_bench_results.json` only has `text_only` filled — it
-is the one approach that runs without the operator rasters. The image approaches
-stay `null` until you supply the PDFs and re-run.
+The committed `results/geomm_bench_results.json` was produced from a run with the
+operator PDFs, so all approaches are filled. Without those rasters (which are not
+redistributed) only `text_only` is reproducible; the image approaches need the
+PDFs.
 
 ## Package layout
 

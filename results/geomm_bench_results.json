@@ -1,6 +1,6 @@
 {
   "benchmark": "GeoMM-Bench",
-  "version": "0.2.0",
+  "version": "0.1.0",
   "well": "Vilkyciai-22",
   "n_intervals": 11,
   "backbone": "openai/clip-vit-base-patch32 (CLIP approaches); Grounding DINO + BLIP-2 are separate models",
@@ -17,34 +17,64 @@
       }
     },
     "vision_clip": {
-      "macro_f1": null,
-      "accuracy": null,
-      "note": "not run (source PDF required)"
+      "macro_f1": 0.278,
+      "accuracy": 0.273,
+      "per_class_f1": {
+        "sandstone": 0.5,
+        "shale": 0.333,
+        "limestone": 0.0,
+        "dolomite": 0.0
+      }
     },
     "vision_clip_fws": {
-      "macro_f1": null,
-      "accuracy": null,
-      "note": "not run (source PDF required)"
+      "macro_f1": 0.324,
+      "accuracy": 0.364,
+      "per_class_f1": {
+        "sandstone": 0.571,
+        "shale": 0.4,
+        "limestone": 0.0,
+        "dolomite": 0.0
+      }
     },
     "multimodal_fusion": {
-      "macro_f1": null,
-      "accuracy": null,
-      "note": "not run (source PDF required)"
+      "macro_f1": 0.631,
+      "accuracy": 0.636,
+      "per_class_f1": {
+        "sandstone": 0.571,
+        "shale": 0.75,
+        "limestone": 0.571,
+        "dolomite": 0.0
+      }
     },
     "multimodal_fusion_fws": {
-      "macro_f1": null,
-      "accuracy": null,
-      "note": "not run (source PDF required)"
+      "macro_f1": 0.524,
+      "accuracy": 0.545,
+      "per_class_f1": {
+        "sandstone": 0.333,
+        "shale": 0.667,
+        "limestone": 0.571,
+        "dolomite": 0.0
+      }
     },
     "grounding_dino": {
-      "macro_f1": null,
-      "accuracy": null,
-      "note": "not run (source PDF required)"
+      "macro_f1": 0.205,
+      "accuracy": 0.364,
+      "per_class_f1": {
+        "sandstone": 0.0,
+        "shale": 0.0,
+        "limestone": 0.615,
+        "dolomite": 0.0
+      }
     },
     "blip2": {
-      "macro_f1": null,
-      "accuracy": null,
-      "note": "not run (source PDF required)"
+      "macro_f1": 0.143,
+      "accuracy": 0.273,
+      "per_class_f1": {
+        "sandstone": 0.429,
+        "shale": 0.0,
+        "limestone": 0.0,
+        "dolomite": 0.0
+      }
     }
   },
   "backbone_sensitivity": {
@@ -56,9 +86,8 @@
           "accuracy": 0.727
         },
         "vision_clip": {
-          "macro_f1": null,
-          "accuracy": null,
-          "note": "not run (source PDF required)"
+          "macro_f1": 0.278,
+          "accuracy": 0.273
         }
       }
     },
@@ -70,9 +99,8 @@
           "accuracy": 0.727
         },
         "vision_clip": {
-          "macro_f1": null,
-          "accuracy": null,
-          "note": "not run (source PDF required)"
+          "macro_f1": 0.578,
+          "accuracy": 0.545
         }
       }
     }

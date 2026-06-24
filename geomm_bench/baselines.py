@@ -87,24 +87,24 @@ def _normalize(emb):
 
 
 def _text_embeddings(texts):
+    # Canonical CLIP text forward: pooled text-model output -> text projection.
     c = load_clip()
     inputs = c["processor"](text=list(texts), return_tensors="pt", padding=True, truncation=True)
     inputs = {k: v.to(DEVICE) for k, v in inputs.items()}
     with torch.no_grad():
-        out = c["model"].get_text_features(**inputs)
-        # transformers <5 returns the projected tensor; >=5 returns a pooled
-        # output object that still needs the CLIP text projection applied.
-        emb = out if torch.is_tensor(out) else c["model"].text_projection(out.pooler_output)
+        pooled = c["model"].text_model(**inputs).pooler_output
+        emb = c["model"].text_projection(pooled)
     return _normalize(emb)
 
 
 def _image_embedding(image):
+    # Canonical CLIP image forward: pooled vision-model output -> visual projection.
     c = load_clip()
     inputs = c["processor"](images=image, return_tensors="pt")
     inputs = {k: v.to(DEVICE) for k, v in inputs.items()}
     with torch.no_grad():
-        out = c["model"].get_image_features(**inputs)
-        emb = out if torch.is_tensor(out) else c["model"].visual_projection(out.pooler_output)
+        pooled = c["model"].vision_model(**inputs).pooler_output
+        emb = c["model"].visual_projection(pooled)
     return _normalize(emb)
 
 

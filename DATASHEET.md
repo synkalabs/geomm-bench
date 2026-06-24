@@ -5,9 +5,9 @@ Following the *Datasheets for Datasets* convention (Gebru et al.).
 ## Motivation
 GeoMM-Bench evaluates whether multimodal AI systems can interpret well log
 *display imagery*, the visual form in which much subsurface data (including
-legacy scanned archives) exists. It was created to provide the first shared,
-reproducible yardstick for vision-based lithofacies interpretation, complementing
-text-only petroleum benchmarks and numerical-log datasets.
+legacy scanned archives) exists. It was built as a shared, reproducible benchmark
+for vision-based lithofacies interpretation, alongside text-only petroleum
+benchmarks and numerical-log datasets.
 
 ## Composition
 - **Instances.** 11 labelled depth intervals from the Vilkyciai-22 well (Baltic
@@ -55,9 +55,9 @@ Vilkyciai-22 well; the pilot is too small for operational use.
 
 ## Limitations
 Single well, single basin, 11 intervals, imbalanced classes, dolomite unlabelled.
-Reported scores establish the existence and approximate magnitude of the
-text–vision gap, not precise population estimates. See the paper's Threats to
-Validity and Limitations sections.
+Reported scores show that a text–vision gap exists and roughly how large it is;
+they are not precise population estimates. See the paper's Threats to Validity and
+Limitations sections.
 
 ## Maintenance
 Maintained by Synka Labs. Versioned; v0.2 will add FORCE 2020 wells with

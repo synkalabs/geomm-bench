@@ -39,7 +39,7 @@ def classify_grounding_dino(image, box_threshold=0.15, text_threshold=0.15):
             outputs = g["model"](**inputs)
         res = g["processor"].post_process_grounded_object_detection(
             outputs, inputs["input_ids"],
-            box_threshold=box_threshold, text_threshold=text_threshold,
+            threshold=box_threshold, text_threshold=text_threshold,
             target_sizes=[image.size[::-1]])[0]
         s = res["scores"].cpu().numpy()
         scores[lith] = float(len(s) * s.mean()) if len(s) else 0.0

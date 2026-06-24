@@ -17,3 +17,12 @@ env/
 *.pdf
 *.tif
 data/images/
+*.tex
+*.docx
+
+# Local copies of source datasets (too large to commit; fetched/derived locally).
+# Vilkyciai operator rasters are covered by *.pdf above. FORCE 2020 (open data,
+# ~1 GB) lives here for development; the v0.2 release ships it via download
+# script or Git LFS, not as a raw commit.
+data/vilkyciai/
+data/force2020/

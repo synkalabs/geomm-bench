@@ -10,7 +10,7 @@ interpretations. The pilot evaluates
 lithofacies classification and documents a large gap between text-based and
 vision-based performance.
 
-> **Status: v0.2 pilot.** One well (Vilkyciai-22), 11 labelled intervals, four
+> **Status: v0.1 pilot.** One well (Vilkyciai-22), 11 labelled intervals, four
 > lithofacies. A single CLIP backbone (`openai/clip-vit-base-patch32`) is used for
 > all CLIP approaches. Results establish the existence and approximate magnitude
 > of the text–vision gap, not precise population estimates. A FORCE 2020-based
@@ -25,21 +25,22 @@ lithofacies present in the pilot.
 | Approach | Macro-F1 | Accuracy |
 |---|---|---|
 | Text-Only (CLIP) | **0.726** | 72.7% |
-| Vision (CLIP, logs) | —&nbsp;† | —&nbsp;† |
-| Vision (CLIP, logs + FWS) | —&nbsp;† | —&nbsp;† |
-| Multimodal fusion (CLIP) | —&nbsp;† | —&nbsp;† |
-| Multimodal fusion (CLIP + FWS) | —&nbsp;† | —&nbsp;† |
-| Grounding DINO | —&nbsp;† | —&nbsp;† |
-| BLIP-2 (VQA) | —&nbsp;† | —&nbsp;† |
+| Multimodal fusion (CLIP) | 0.631 | 63.6% |
+| Multimodal fusion (CLIP + FWS) | 0.524 | 54.5% |
+| Vision (CLIP, logs + FWS) | 0.324 | 36.4% |
+| Vision (CLIP, logs) | 0.278 | 27.3% |
+| Grounding DINO | 0.205 | 36.4% |
+| BLIP-2 (VQA) | 0.143 | 27.3% |
 | Random baseline | 0.25 | 25% |
 
-† Image approaches require the operator source rasters (not redistributed; see
-`DATASHEET.md`) and are filled in by running `run_geomm_bench.py` with the PDFs.
-Only `text_only` runs without them.
+Image approaches require the operator source rasters (not redistributed; see
+`DATASHEET.md`); `text_only` runs without them. The numbers above are from a run
+with the PDFs and live in `results/geomm_bench_results.json`.
 
-In the pilot, text classifies reasonably (0.726 macro-F1) but the image-based
-approaches do not: CLIP-vision, grounding, VQA and the added-modality fusion all
-do poorly, and adding Full Wave Sonic makes the fusion worse.
+In the pilot, text classifies best (0.726 macro-F1). Every image-based approach is
+weaker: multimodal fusion (0.631) does not reach text, the pure-vision approaches
+trail further (0.278–0.324), grounding (0.205) and VQA (0.143) fall below the
+random-baseline F1, and adding Full Wave Sonic does not close the gap.
 
 ### Backbone sensitivity
 
@@ -50,11 +51,10 @@ in `results/geomm_bench_results.json`, produced by the same runner):
 | Approach (macro-F1) | OpenAI CLIP | open-clip / LAION |
 |---|---|---|
 | Text-Only (CLIP) | **0.726** | **0.726** |
-| Vision-Only (CLIP) | —&nbsp;† | —&nbsp;† |
+| Vision-Only (CLIP) | 0.278 | 0.578 |
 
-† Vision needs the source PDFs; run `run_geomm_bench.py` with them to fill these.
-In earlier runs vision-CLIP scored about 0.09 on OpenAI CLIP and about 0.62 on
-LAION, while text-only stayed at 0.726 on both. Because the vision result depends
+Text-only is the same on both backbones; vision-CLIP roughly doubles (0.278 →
+0.578) just by changing the pretraining corpus. Because the vision result depends
 so much on the backbone, the safer reading is that no off-the-shelf approach is
 dependable here, rather than that vision always fails.
 
