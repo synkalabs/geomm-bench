@@ -11,3 +11,6 @@ pdf2image>=1.16
 # Optional: the backbone-sensitivity check (the backbone_sensitivity block) scores
 # vision-CLIP under a second backbone via open-clip/LAION.
 open-clip-torch>=2.20
+# Scaled track (FORCE 2020): load the curves and run the numeric reference.
+pandas>=1.5
+scikit-learn>=1.2

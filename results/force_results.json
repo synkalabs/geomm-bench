@@ -1,0 +1,57 @@
+{
+  "benchmark": "GeoMM-Bench",
+  "track": "FORCE 2020 (scaled, rendered displays)",
+  "n_wells": 19,
+  "n_intervals": 3664,
+  "class_distribution": {
+    "shale": 2487,
+    "sandstone": 980,
+    "limestone": 191,
+    "dolomite": 6
+  },
+  "metric": "macro_f1_present_classes",
+  "results": {
+    "numeric_curves": {
+      "macro_f1": 0.454,
+      "accuracy": 0.693,
+      "ci95": [
+        0.394,
+        0.617
+      ],
+      "per_class_f1": {
+        "sandstone": 0.501,
+        "shale": 0.827,
+        "limestone": 0.432,
+        "dolomite": 0.056
+      },
+      "pred_distribution": {
+        "shale": 2172,
+        "sandstone": 848,
+        "limestone": 508,
+        "dolomite": 136
+      }
+    },
+    "vision_clip": {
+      "macro_f1": 0.088,
+      "accuracy": 0.16,
+      "ci95": [
+        0.071,
+        0.13
+      ],
+      "per_class_f1": {
+        "sandstone": 0.0,
+        "shale": 0.3,
+        "limestone": 0.05,
+        "dolomite": 0.0
+      },
+      "pred_distribution": {
+        "limestone": 2170,
+        "shale": 1030,
+        "dolomite": 464
+      }
+    }
+  },
+  "baselines": {
+    "random_four_class_f1": 0.25
+  }
+}

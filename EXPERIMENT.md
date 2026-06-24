@@ -63,6 +63,17 @@ python scripts/make_results_figure.py \
   --out images/Figure2_Results_Comparison.png
 ```
 
+The scaled track (FORCE 2020) has its own runner. It renders synthetic displays
+from the curves, runs vision-CLIP against a numeric reference, and reports
+macro-F1 with well-level cross-validation and bootstrap confidence intervals.
+FORCE 2020 is public open data and is not redistributed here, so point `--csv`
+at a local copy of `train.csv`.
+
+```bash
+python run_force.py --csv data/force2020/train.csv \
+  --min-coverage 0.7 --out results/force_results.json
+```
+
 The committed `results/geomm_bench_results.json` was produced from a run with the
 operator PDFs, so all approaches are filled. Without those rasters (which are not
 redistributed) only `text_only` is reproducible; the image approaches need the
@@ -72,15 +83,18 @@ PDFs.
 
 ```
 GeoMM-Bench_Experiment.ipynb  notebook
-run_geomm_bench.py            CLI entry point (all approaches)
+run_geomm_bench.py            pilot track runner (Vilkyciai, all approaches)
+run_force.py                  scaled track runner (FORCE 2020, numeric vs vision)
 geomm_bench/
   constants.py                class set (no heavy deps)
-  baselines.py                CLIP backbone (openai/clip-vit-base-patch32): text / vision / fusion + crop calibration
+  baselines.py                CLIP backbone openai/clip-vit-base-patch32, text / vision / fusion + crop calibration
   fws_probe.py                multi-image logs+FWS CLIP approaches
   optional_models.py          Grounding DINO, BLIP-2 (separate models)
   sensitivity.py              the same approaches under open-clip/LAION (optional)
+  force.py                    FORCE 2020 load, segment, render, curve features
+  stats.py                    cluster bootstrap confidence intervals
   metrics.py                  macro-F1, per-class P/R/F1 (no torch)
-data/ground_truth.json        11 intervals: depth, label, description, features
+data/ground_truth.json        11 pilot intervals: depth, label, description, features
 scripts/make_results_figure.py    plots from the results JSON
 scripts/make_architecture_figure.py
 results/                      results JSON written here

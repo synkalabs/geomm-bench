@@ -5,7 +5,7 @@
 A benchmark for evaluating multimodal AI on **well log display interpretation**.
 
 GeoMM-Bench measures whether vision–language models can read the visual artifacts
-petrophysicists actually use — composite log displays and computed mineral-volume
+petrophysicists actually use, namely composite log displays and computed mineral-volume
 interpretations. The pilot evaluates
 lithofacies classification and documents a large gap between text-based and
 vision-based performance.
