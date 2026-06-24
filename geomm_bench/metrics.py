@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from collections import defaultdict
 
-from geomm_bench.baselines import LITHOLOGY_CLASSES
+from geomm_bench.constants import LITHOLOGY_CLASSES
 
 
 def per_class_prf(y_true, y_pred, classes=LITHOLOGY_CLASSES):

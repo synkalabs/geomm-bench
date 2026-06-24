@@ -1,0 +1,14 @@
+{
+  "benchmark": "GeoMM-Bench", "version": "0.2.0-verified",
+  "well": "Vilkyciai-22", "n_intervals": 11,
+  "source": "OpenAI CLIP modality probe (Probe B); regenerate with run_geomm_bench.py --probe B. Source notebook withheld (see provenance/README.md).",
+  "metric": "macro_f1",
+  "results": {
+    "text_only_clip":        {"macro_f1": 0.746, "accuracy": 0.727, "note": "Text descriptions vs class prompts."},
+    "vision_only_clip":      {"macro_f1": 0.091, "accuracy": 0.182, "note": "Vision on logs. Degenerate: collapses to shale."},
+    "visual_grounding_dino": {"macro_f1": null,  "accuracy": null,  "note": "Not in GeoMM_Code run; see Complete_Evaluation for DINO sensitivity."},
+    "multimodal_vqa_blip2":  {"macro_f1": 0.343, "accuracy": 0.364, "note": "Multimodal basic (text+logs)."},
+    "multimodal_fusion_clip":{"macro_f1": 0.103, "accuracy": 0.182, "note": "Multimodal full +FWS. WORSE than text (-86%); FWS hurts."}
+  },
+  "baselines": {"random_four_class_f1": 0.25}
+}

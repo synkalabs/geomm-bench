@@ -34,17 +34,17 @@ DEVICE, DTYPE = get_device()
 # --------------------------------------------------------------------------
 # Class prompts (exact prompts used in the reported pilot)
 # --------------------------------------------------------------------------
-LITHOLOGY_CLASSES = ["sandstone", "shale", "limestone", "dolomite"]
+from geomm_bench.constants import LITHOLOGY_CLASSES
 
 TEXT_CLASS_PROMPTS = {
     "sandstone": ("A geological formation dominated by quartz sand grains with low gamma ray, "
                   "yellow coloring in mineral models, and good porosity."),
     "shale": ("A clay-rich formation with high gamma ray readings above 80 GAPI, "
               "magenta coloring in mineral models, and low permeability."),
-    "limestone": ("A carbonate formation dominated by calcite with low gamma ray, "
-                  "green coloring in mineral models, and high density around 2.71 g/cc."),
-    "dolomite": ("A carbonate formation dominated by dolomite mineral with very low gamma ray, "
-                 "cyan coloring in mineral models, and very high density above 2.85 g/cc."),
+    "limestone": ("A calcite-dominated carbonate formation with low gamma ray, "
+                  "green coloring in mineral models, and high density."),
+    "dolomite": ("A magnesium-rich carbonate formation with low gamma ray, "
+                 "cyan coloring in mineral models, and moderate to high density."),
 }
 
 VISION_CLASS_PROMPTS = {

@@ -64,9 +64,7 @@ def _val(results, key, field):
 def make_figure(results_path, out_path):
     with open(results_path) as f:
         doc = json.load(f)
-    # Accept either the canonical pilot_results.json schema ({"results": {...}})
-    # or the flat {approach: {...}} emitted by run_evaluation.py --out.
-    results = doc["results"] if isinstance(doc, dict) and "results" in doc else doc
+    results = doc["results"]
 
     labels = [l for _, l, _ in LAYOUT]
     colors = [COLORS[g] for _, _, g in LAYOUT]

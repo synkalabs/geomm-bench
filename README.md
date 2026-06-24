@@ -1,5 +1,7 @@
 # GeoMM-Bench
 
+> To reproduce: see **EXPERIMENT.md** (one runner, one results file).
+
 A benchmark for evaluating multimodal AI on **well log display interpretation**.
 
 GeoMM-Bench measures whether vision–language models can read the visual artifacts
@@ -42,13 +44,13 @@ rasterize source displays.
 Text-only (no imagery required — downloads CLIP weights on first run):
 
 ```bash
-python scripts/run_evaluation.py --approaches text_only --out results/text_only.json
+python run_geomm_bench.py --probe A --out results/text_only.json
 ```
 
 Vision approaches (require the source log PDF; see `DATASHEET.md` on availability):
 
 ```bash
-python scripts/run_evaluation.py \
+python run_geomm_bench.py \
     --approaches text_only vision_clip fusion \
     --logs-pdf path/to/vilkyciai22_logs500.pdf
 ```
@@ -56,7 +58,7 @@ python scripts/run_evaluation.py \
 Optional heavy models:
 
 ```bash
-python scripts/run_evaluation.py --approaches grounding_dino blip2 \
+python run_geomm_bench.py --approaches grounding_dino blip2 \
     --logs-pdf path/to/vilkyciai22_logs500.pdf
 ```
 
@@ -67,8 +69,8 @@ data/ground_truth.json      11 labelled intervals: depth, label, description, vi
 geomm_bench/baselines.py    CLIP text/vision/fusion, exact prompts, crop calibration constants
 geomm_bench/optional_models.py  Grounding DINO + BLIP-2
 geomm_bench/metrics.py      macro-F1, per-class P/R/F1, accuracy
-scripts/run_evaluation.py   CLI runner
-results/pilot_results.json  Reported pilot numbers
+run_geomm_bench.py   CLI runner (two probes)
+results/geomm_bench_results.json  Reported pilot numbers
 DATASHEET.md                Dataset documentation (composition, collection, distribution)
 ```
 
