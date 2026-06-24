@@ -4,8 +4,9 @@
 
 If you are picking this up cold, this is the only document you need to reproduce
 the benchmark. There is exactly one runner (`run_geomm_bench.py`) and one results
-file it writes. The older standalone notebooks are archived as provenance only
-(see `provenance/`), not as the way to run anything.
+file it writes. You can run the experiment two equivalent ways: the unified notebook
+`GeoMM-Bench_Experiment.ipynb`, or the command-line runner `run_geomm_bench.py`.
+Both call the same package code and write the same results file.
 
 ## What the experiment asks
 
@@ -54,7 +55,8 @@ python scripts/make_results_figure.py \
 ## Package layout
 
 ```
-run_geomm_bench.py            <- THE entry point (both probes)
+GeoMM-Bench_Experiment.ipynb  <- unified notebook (both probes)
+run_geomm_bench.py            <- OR the CLI entry point (both probes)
 geomm_bench/
   constants.py                class set (no heavy deps)
   baselines.py                text / vision-CLIP / fusion + crop calibration
@@ -65,7 +67,6 @@ data/ground_truth.json        11 intervals: depth, label, description, features
 scripts/make_results_figure.py    plots from results JSON
 scripts/make_architecture_figure.py
 results/                      results JSON written here
-provenance/                   the original executed notebooks, kept for audit only
 ```
 
 ## The one rule

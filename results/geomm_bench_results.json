@@ -1,7 +1,7 @@
 {
   "benchmark": "GeoMM-Bench", "version": "0.2.0-verified",
   "well": "Vilkyciai-22", "n_intervals": 11,
-  "source": "OpenAI CLIP modality probe (Probe B); regenerate with run_geomm_bench.py --probe B. Source notebook withheld (see provenance/README.md).",
+  "source": "Probe B (OpenAI CLIP) summary block. Regenerate via GeoMM-Bench_Experiment.ipynb or run_geomm_bench.py --probe B.",
   "metric": "macro_f1",
   "results": {
     "text_only_clip":        {"macro_f1": 0.746, "accuracy": 0.727, "note": "Text descriptions vs class prompts."},
