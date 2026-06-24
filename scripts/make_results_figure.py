@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-"""Generate the GeoMM-Bench results figure directly from the results JSON.
+"""Plot the GeoMM-Bench results figure from the results JSON.
 
-The figure is plotted FROM the recorded numbers, so it cannot drift from the
-reported results. Expects the flat schema written by run_geomm_bench.py:
+Reads the numbers straight from the file written by run_geomm_bench.py:
 
     {"results": {"text_only": {"macro_f1": ..., "accuracy": ...}, ...}}
 
-Approaches with no recorded value (e.g. before the source PDFs have been run)
-are drawn as "n/a" rather than filled with a placeholder.
+Approaches with no recorded value (e.g. before the source PDFs have been run) are
+drawn as "n/a" rather than filled with a placeholder.
 
 Usage:
     python scripts/make_results_figure.py \

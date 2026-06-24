@@ -1,15 +1,9 @@
-"""Full Wave Sonic (FWS) multi-image approaches for GeoMM-Bench.
+"""Multi-image (logs + Full Wave Sonic) CLIP approaches.
 
-The "does adding more visual modality help?" approaches of the benchmark:
-
-    vision (logs)            ->  vision (logs + FWS)
-    multimodal (text+logs)   ->  multimodal (text+logs+FWS)
-
-These share the single CLIP backbone defined in baselines.py
-(``openai/clip-vit-base-patch32``) — they are not a separate model or backbone.
-The pilot answer is NO: adding the Full Wave Sonic display and fusing modalities
-degrades macro-F1 rather than improving it, evidence that the bottleneck is
-representational, not a lack of input data.
+These add the FWS display as a second image to the vision and fusion approaches,
+to check whether more visual modality helps. They use the CLIP backbone from
+baselines.py (openai/clip-vit-base-patch32), not a separate model. In the pilot,
+adding FWS lowers macro-F1 rather than raising it.
 """
 from __future__ import annotations
 

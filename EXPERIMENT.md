@@ -1,17 +1,13 @@
-# GeoMM-Bench — The Experiment
+# Reproducing GeoMM-Bench
 
-**One experiment. One backbone. One results file.**
+There are two ways to run the experiment: the notebook
+`GeoMM-Bench_Experiment.ipynb` or the CLI `run_geomm_bench.py`. They call the same
+package code and write the same results file.
 
-If you are picking this up cold, this is the only document you need to reproduce
-the benchmark. You can run it two equivalent ways — the unified notebook
-`GeoMM-Bench_Experiment.ipynb` or the CLI runner `run_geomm_bench.py`. Both call
-the same package code and write the same results file.
+## Approaches
 
-## What the experiment asks
-
-Can off-the-shelf, general-purpose AI interpret well-log *display images*? All
-CLIP-based approaches share a single backbone (`openai/clip-vit-base-patch32`);
-Grounding DINO and BLIP-2 are separate, non-CLIP models. Seven approaches:
+All CLIP approaches use one backbone, `openai/clip-vit-base-patch32`. Grounding
+DINO and BLIP-2 are separate models.
 
 | Approach | Input | Model |
 |---|---|---|
@@ -23,16 +19,26 @@ Grounding DINO and BLIP-2 are separate, non-CLIP models. Seven approaches:
 | `grounding_dino` | log image | Grounding DINO |
 | `blip2` | log image | BLIP-2 VQA |
 
-**Pilot result (Vilkyciai-22, n=11):** only text classifies reasonably
-(`text_only` macro-F1 0.726 / accuracy 0.727). Every vision, grounding, VQA and
-added-modality approach fails or is unreliable, and adding Full Wave Sonic makes
-it worse. The bottleneck is the visual representation, not the data.
+On the Vilkyciai-22 pilot (n=11) only text classifies reasonably (`text_only`
+macro-F1 0.726 / accuracy 0.727). The vision, grounding, VQA and added-modality
+approaches all do poorly, and adding the Full Wave Sonic display makes the fusion
+worse rather than better.
 
-> **Backbone caveat (reported honestly).** Vision-CLIP is sensitive to the CLIP
-> backbone: under `openai/clip-vit-base-patch32` it scores ~0.09 macro-F1, but
-> under open-clip/LAION ViT-B-32 it reached ~0.62. The conclusion is therefore
-> "no off-the-shelf approach is *reliable*," **not** that vision is uniformly
-> near-random. `text_only` is backbone-robust (~0.73 under both).
+## Backbone sensitivity
+
+Vision-CLIP results vary with the CLIP backbone, so the runner also scores
+text-only and vision-CLIP under open-clip/LAION and writes a
+`backbone_sensitivity` block next to the main results.
+
+| macro-F1 | OpenAI CLIP | open-clip / LAION |
+|---|---|---|
+| `text_only` | 0.726 | 0.726 |
+| `vision_clip` | — (needs PDFs) | — (needs PDFs) |
+
+Text-only is the same on both backbones; vision-CLIP is not — earlier runs put it
+near 0.09 on OpenAI CLIP and around 0.62 on LAION. That is why both are reported
+instead of picking one. The LAION backbone needs `open-clip-torch`; without it,
+only the OpenAI row is scored.
 
 ## Reproduce
 
@@ -49,7 +55,7 @@ python run_geomm_bench.py \
   --out results/geomm_bench_results.json
 ```
 
-Then regenerate the figure FROM the results (it cannot drift):
+Regenerate the figure from the results file:
 
 ```bash
 python scripts/make_results_figure.py \
@@ -57,29 +63,27 @@ python scripts/make_results_figure.py \
   --out images/Figure2_Results_Comparison.png
 ```
 
-The shipped `results/geomm_bench_results.json` has `text_only` filled (the only
-approach reproducible without the operator rasters); the image approaches are
-`null` until you supply the PDFs and re-run.
+The committed `results/geomm_bench_results.json` only has `text_only` filled — it
+is the one approach that runs without the operator rasters. The image approaches
+stay `null` until you supply the PDFs and re-run.
 
 ## Package layout
 
 ```
-GeoMM-Bench_Experiment.ipynb  <- notebook
-run_geomm_bench.py            <- OR the CLI entry point (all approaches)
+GeoMM-Bench_Experiment.ipynb  notebook
+run_geomm_bench.py            CLI entry point (all approaches)
 geomm_bench/
   constants.py                class set (no heavy deps)
   baselines.py                CLIP backbone (openai/clip-vit-base-patch32): text / vision / fusion + crop calibration
   fws_probe.py                multi-image logs+FWS CLIP approaches
-  optional_models.py          Grounding DINO, BLIP-2 (separate, non-CLIP models)
-  metrics.py                  macro-F1, per-class P/R/F1 (torch-free)
+  optional_models.py          Grounding DINO, BLIP-2 (separate models)
+  sensitivity.py              the same approaches under open-clip/LAION (optional)
+  metrics.py                  macro-F1, per-class P/R/F1 (no torch)
 data/ground_truth.json        11 intervals: depth, label, description, features
 scripts/make_results_figure.py    plots from the results JSON
 scripts/make_architecture_figure.py
 results/                      results JSON written here
 ```
 
-## The one rule
-
-A number enters a paper, figure, or the repo only if `run_geomm_bench.py`
-produced it and you can open the results JSON right now. No copied-forward
-priors, no hand-typed tables, no narrative-template conclusions.
+The README table and the figure are both generated from the results JSON. If you
+change a prompt, crop, or model, re-run the benchmark so they stay in step.

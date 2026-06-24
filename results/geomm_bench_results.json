@@ -47,10 +47,40 @@
       "note": "not run (source PDF required)"
     }
   },
+  "backbone_sensitivity": {
+    "openai_clip": {
+      "backbone": "openai/clip-vit-base-patch32",
+      "results": {
+        "text_only": {
+          "macro_f1": 0.726,
+          "accuracy": 0.727
+        },
+        "vision_clip": {
+          "macro_f1": null,
+          "accuracy": null,
+          "note": "not run (source PDF required)"
+        }
+      }
+    },
+    "open_clip_laion": {
+      "backbone": "open-clip ViT-B-32 (laion2b_s34b_b79k)",
+      "results": {
+        "text_only": {
+          "macro_f1": 0.726,
+          "accuracy": 0.727
+        },
+        "vision_clip": {
+          "macro_f1": null,
+          "accuracy": null,
+          "note": "not run (source PDF required)"
+        }
+      }
+    }
+  },
   "baselines": {
     "random_four_class_f1": 0.25
   },
   "notes": [
-    "Backbone caveat: vision-CLIP is backbone-sensitive \u2014 open-clip/LAION ViT-B-32 reached ~0.62 macro-F1 vs ~0.09 here. The finding is that no off-the-shelf approach is reliable, not that vision is uniformly near-random."
+    "vision-CLIP scores depend heavily on the CLIP backbone (see backbone_sensitivity), so vision results here should be read as unreliable rather than uniformly low."
   ]
 }

@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
-"""GeoMM-Bench: the single experiment entry point.
+"""GeoMM-Bench runner.
 
-One backbone, one results file. All CLIP-based approaches share
-``openai/clip-vit-base-patch32``; Grounding DINO and BLIP-2 are separate,
-non-CLIP models. The benchmark asks one question — can off-the-shelf AI read
-well-log display images? — across seven approaches:
+All CLIP approaches use one backbone, openai/clip-vit-base-patch32; Grounding DINO
+and BLIP-2 are separate models. Seven approaches:
 
     text_only             CLIP text embedding of the description
     vision_clip           CLIP image embedding of the log crop
@@ -14,18 +12,14 @@ well-log display images? — across seven approaches:
     grounding_dino        Grounding DINO (separate model)
     blip2                 BLIP-2 VQA (separate model)
 
-Pilot finding: no off-the-shelf visual approach reliably reads the displays —
-only text classifies well; vision, grounding, VQA and added-modality fusion all
-fail or are unreliable, and adding FWS makes it worse. Backbone caveat:
-vision-CLIP is backbone-sensitive (open-clip/LAION ViT-B-32 reached ~0.62
-macro-F1 vs ~0.09 here), so the claim is "no off-the-shelf approach is
-reliable," not that vision is uniformly near-random.
+It also writes a backbone_sensitivity block: text-only and vision-CLIP scored
+under a second backbone (open-clip/LAION), since vision-CLIP varies a lot by
+backbone. Text-only needs no imagery; the rest need the source PDFs
+(operator-provided, not redistributed — see DATASHEET.md). See EXPERIMENT.md.
 
 Usage:
     python run_geomm_bench.py --out results/text_only.json          # text-only
     python run_geomm_bench.py --logs-pdf logs.pdf --fws-pdf fws.pdf  # everything
-Text-only needs no imagery; the other approaches need the source PDFs
-(operator-provided, not redistributed — see DATASHEET.md).
 """
 from __future__ import annotations
 
@@ -45,9 +39,9 @@ ALL_APPROACHES = [
     "grounding_dino", "blip2",
 ]
 BACKBONE = "openai/clip-vit-base-patch32 (CLIP approaches); Grounding DINO + BLIP-2 are separate models"
-CAVEAT = ("Backbone caveat: vision-CLIP is backbone-sensitive — open-clip/LAION "
-          "ViT-B-32 reached ~0.62 macro-F1 vs ~0.09 here. The finding is that no "
-          "off-the-shelf approach is reliable, not that vision is uniformly near-random.")
+CAVEAT = ("vision-CLIP scores depend heavily on the CLIP backbone (see "
+          "backbone_sensitivity), so vision results here should be read as unreliable "
+          "rather than uniformly low.")
 
 
 def _load_pages(pdf, dpi=150):
@@ -60,13 +54,9 @@ def load_ground_truth(path):
         return json.load(f)["intervals"]
 
 
-def run(approaches, gt, logs_pdf=None, fws_pdf=None):
+def run(approaches, gt, log_pages=None, fws_pages=None):
+    """Score the requested approaches given already-rasterized page images."""
     from geomm_bench.fws_probe import classify_vision_multi_image, classify_multimodal_multi_image
-
-    needs_log = any(a != "text_only" for a in approaches)
-    needs_fws = any(a.endswith("_fws") for a in approaches)
-    log_pages = _load_pages(logs_pdf) if (needs_log and logs_pdf) else None
-    fws_pages = _load_pages(fws_pdf) if (needs_fws and fws_pdf) else None
 
     y_true = [g["lithology"] for g in gt]
     preds = {a: [] for a in approaches}
@@ -115,6 +105,22 @@ def run(approaches, gt, logs_pdf=None, fws_pdf=None):
     return results
 
 
+def build_doc(gt, log_pages=None, fws_pages=None, approaches=ALL_APPROACHES, sensitivity=True):
+    """Assemble the full results document (primary results + sensitivity block)."""
+    doc = {
+        "benchmark": "GeoMM-Bench", "version": "0.2.0", "well": "Vilkyciai-22",
+        "n_intervals": len(gt), "backbone": BACKBONE,
+        "metric": "macro_f1_present_classes",
+        "results": run(approaches, gt, log_pages, fws_pages),
+    }
+    if sensitivity:
+        from geomm_bench.sensitivity import run_sensitivity
+        doc["backbone_sensitivity"] = run_sensitivity(gt, log_pages)
+    doc["baselines"] = {"random_four_class_f1": 0.25}
+    doc["notes"] = [CAVEAT]
+    return doc
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--approaches", nargs="+", default=ALL_APPROACHES, choices=ALL_APPROACHES)
@@ -122,24 +128,28 @@ def main():
         os.path.dirname(os.path.abspath(__file__)), "data", "ground_truth.json"))
     ap.add_argument("--logs-pdf", default=None)
     ap.add_argument("--fws-pdf", default=None)
+    ap.add_argument("--no-sensitivity", action="store_true",
+                    help="skip the backbone-sensitivity block")
     ap.add_argument("--out", default="results/geomm_bench_results.json")
     args = ap.parse_args()
 
     gt = load_ground_truth(args.ground_truth)
-    results = run(args.approaches, gt, args.logs_pdf, args.fws_pdf)
-    doc = {
-        "benchmark": "GeoMM-Bench", "version": "0.2.0", "well": "Vilkyciai-22",
-        "n_intervals": len(gt), "backbone": BACKBONE,
-        "metric": "macro_f1_present_classes", "results": results,
-        "baselines": {"random_four_class_f1": 0.25}, "notes": [CAVEAT],
-    }
+    log_pages = _load_pages(args.logs_pdf) if args.logs_pdf else None
+    fws_pages = _load_pages(args.fws_pdf) if args.fws_pdf else None
+    doc = build_doc(gt, log_pages, fws_pages, args.approaches, sensitivity=not args.no_sensitivity)
+
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
     with open(args.out, "w") as f:
         json.dump(doc, f, indent=2)
     print(f"Wrote {args.out}  (backbone: {BACKBONE})")
     for a in args.approaches:
-        v = results[a]
+        v = doc["results"][a]
         print(f"  {a:24s} F1={v['macro_f1']}  acc={v['accuracy']}")
+    if "backbone_sensitivity" in doc:
+        print("backbone_sensitivity:")
+        for bk, blk in doc["backbone_sensitivity"].items():
+            row = "  ".join(f"{a}={blk['results'][a]['macro_f1']}" for a in blk["results"])
+            print(f"  {bk:16s} {row}")
 
 
 if __name__ == "__main__":

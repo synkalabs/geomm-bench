@@ -8,3 +8,6 @@ matplotlib>=3.6
 # Vision approaches additionally need the operator source PDFs (see DATASHEET.md)
 # and poppler for rasterization:
 pdf2image>=1.16
+# Optional: the backbone-sensitivity check (the backbone_sensitivity block) scores
+# vision-CLIP under a second backbone via open-clip/LAION.
+open-clip-torch>=2.20

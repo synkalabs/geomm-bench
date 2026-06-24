@@ -1,6 +1,6 @@
 # GeoMM-Bench
 
-> To reproduce: see **EXPERIMENT.md** — notebook or CLI runner, one results file.
+> To reproduce, see **EXPERIMENT.md**.
 
 A benchmark for evaluating multimodal AI on **well log display interpretation**.
 
@@ -37,17 +37,26 @@ lithofacies present in the pilot.
 `DATASHEET.md`) and are filled in by running `run_geomm_bench.py` with the PDFs.
 Only `text_only` runs without them.
 
-The pilot finding is that **no off-the-shelf visual approach reliably reads the
-displays**: text classifies reasonably (0.726 macro-F1), while CLIP-vision,
-grounding, VQA and added-modality fusion fail or are unreliable, and adding Full
-Wave Sonic makes it worse.
+In the pilot, text classifies reasonably (0.726 macro-F1) but the image-based
+approaches do not: CLIP-vision, grounding, VQA and the added-modality fusion all
+do poorly, and adding Full Wave Sonic makes the fusion worse.
 
-**Backbone caveat (for honesty).** Vision-CLIP is backbone-sensitive: under
-`openai/clip-vit-base-patch32` it scores ~0.09 macro-F1, but under open-clip/LAION
-ViT-B-32 it reached ~0.62. So the claim is "no off-the-shelf approach is
-*reliable*," not that vision is uniformly near-random. Numbers are in
-`results/geomm_bench_results.json` and plotted in
-`images/Figure2_Results_Comparison.png`.
+### Backbone sensitivity
+
+Vision-CLIP depends on the CLIP backbone, so the same two approaches are scored
+under a second backbone and reported explicitly (the `backbone_sensitivity` block
+in `results/geomm_bench_results.json`, produced by the same runner):
+
+| Approach (macro-F1) | OpenAI CLIP | open-clip / LAION |
+|---|---|---|
+| Text-Only (CLIP) | **0.726** | **0.726** |
+| Vision-Only (CLIP) | —&nbsp;† | —&nbsp;† |
+
+† Vision needs the source PDFs; run `run_geomm_bench.py` with them to fill these.
+In earlier runs vision-CLIP scored about 0.09 on OpenAI CLIP and about 0.62 on
+LAION, while text-only stayed at 0.726 on both. Because the vision result depends
+so much on the backbone, the safer reading is that no off-the-shelf approach is
+dependable here, rather than that vision always fails.
 
 ## Install
 
@@ -62,9 +71,8 @@ the source displays.
 
 ## Reproduce
 
-See **EXPERIMENT.md** for the full guide. Two equivalent entry points — the
-unified notebook `GeoMM-Bench_Experiment.ipynb` or the CLI runner below — call
-the same package code and write the same results file.
+See **EXPERIMENT.md** for details. The notebook `GeoMM-Bench_Experiment.ipynb` and
+the CLI runner below run the same code and write the same results file.
 
 Text-only (no imagery; downloads CLIP weights on first run):
 
@@ -81,7 +89,7 @@ python run_geomm_bench.py \
     --out results/geomm_bench_results.json
 ```
 
-Then regenerate the figure from the results file (it cannot drift):
+Then regenerate the figure from the results file:
 
 ```bash
 python scripts/make_results_figure.py \
@@ -92,9 +100,9 @@ python scripts/make_results_figure.py \
 ## What's in this release
 
 ```
-GeoMM-Bench_Experiment.ipynb    unified notebook  — or —
-run_geomm_bench.py              CLI runner (all approaches)
-EXPERIMENT.md                   how to reproduce (single source of truth)
+GeoMM-Bench_Experiment.ipynb    notebook (runs all approaches)
+run_geomm_bench.py              CLI runner (runs all approaches)
+EXPERIMENT.md                   how to reproduce
 data/ground_truth.json          11 labelled intervals: depth, label, description, visual features
 geomm_bench/constants.py        lithology class set (torch-free)
 geomm_bench/baselines.py        CLIP backbone (openai/clip-vit-base-patch32): text/vision/fusion + crop calibration

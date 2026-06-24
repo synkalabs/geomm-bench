@@ -1,19 +1,10 @@
-"""
-GeoMM-Bench evaluation harness.
+"""CLIP baselines for lithofacies classification from well-log displays.
 
-Lithofacies classification baselines for well log display interpretation.
-All CLIP-based approaches (text-only, vision-only, multimodal fusion, and the
-multi-image FWS variants in fws_probe.py) share a single backbone:
-``openai/clip-vit-base-patch32``. Grounding DINO and BLIP-2 (optional_models.py)
-are separate, non-CLIP models.
-
-All models are used off-the-shelf without fine-tuning. The pilot finding is that
-no off-the-shelf visual approach reliably reads log displays: only text
-classifies well, while CLIP-vision, grounding, VQA and added-modality fusion all
-fail or are unreliable. Backbone caveat: vision-CLIP is sensitive to the backbone
-— under open-clip/LAION ViT-B-32 it reached ~0.62 macro-F1 (vs ~0.09 here), so
-the claim is "no off-the-shelf approach is reliable," not that vision is
-uniformly near-random. See EXPERIMENT.md.
+The text-only, vision-only and fusion approaches (and the multi-image FWS
+variants in fws_probe.py) all use one CLIP backbone, openai/clip-vit-base-patch32.
+Grounding DINO and BLIP-2 (optional_models.py) are separate models. Everything is
+off the shelf, no fine-tuning. See EXPERIMENT.md for results and the
+backbone-sensitivity note.
 """
 from __future__ import annotations
 
