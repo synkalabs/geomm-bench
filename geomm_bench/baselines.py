@@ -2,25 +2,29 @@
 GeoMM-Bench evaluation harness.
 
 Lithofacies classification baselines for well log display interpretation.
-This module reproduces the baselines reported in the GeoMM-Bench pilot:
-text-only (CLIP), vision-only (CLIP), visual grounding (Grounding DINO),
-multimodal VQA (BLIP-2), and CLIP fusion.
+All CLIP-based approaches (text-only, vision-only, multimodal fusion, and the
+multi-image FWS variants in fws_probe.py) share a single backbone:
+``openai/clip-vit-base-patch32``. Grounding DINO and BLIP-2 (optional_models.py)
+are separate, non-CLIP models.
 
-All models are used off-the-shelf without fine-tuning. The reported pilot
-results are: text-only macro-F1 0.886; vision-only CLIP 0.620;
-visual grounding 0.071; BLIP-2 accuracy 18.2%.
+All models are used off-the-shelf without fine-tuning. The pilot finding is that
+no off-the-shelf visual approach reliably reads log displays: only text
+classifies well, while CLIP-vision, grounding, VQA and added-modality fusion all
+fail or are unreliable. Backbone caveat: vision-CLIP is sensitive to the backbone
+— under open-clip/LAION ViT-B-32 it reached ~0.62 macro-F1 (vs ~0.09 here), so
+the claim is "no off-the-shelf approach is reliable," not that vision is
+uniformly near-random. See EXPERIMENT.md.
 """
 from __future__ import annotations
 
 import torch
-import open_clip
 
 
 # --------------------------------------------------------------------------
 # Device
 # --------------------------------------------------------------------------
 def get_device():
-    """Select the best available device and dtype (matches reported runs)."""
+    """Select the best available device and dtype."""
     if torch.backends.mps.is_available():
         return "mps", torch.float32
     if torch.cuda.is_available():
@@ -32,7 +36,7 @@ DEVICE, DTYPE = get_device()
 
 
 # --------------------------------------------------------------------------
-# Class prompts (exact prompts used in the reported pilot)
+# Class prompts (shared by every CLIP-based approach)
 # --------------------------------------------------------------------------
 from geomm_bench.constants import LITHOLOGY_CLASSES
 
@@ -70,36 +74,47 @@ CROP_MARGIN_FRAC = 0.02
 
 
 # --------------------------------------------------------------------------
-# CLIP backbone
+# CLIP backbone — single shared model: openai/clip-vit-base-patch32
 # --------------------------------------------------------------------------
+CLIP_MODEL_NAME = "openai/clip-vit-base-patch32"
 _clip = {}
 
 
-def load_clip(model_name="ViT-B-32", pretrained="laion2b_s34b_b79k"):
-    """Load and cache the CLIP model used for text-only and vision-only baselines."""
+def load_clip(model_name=CLIP_MODEL_NAME):
+    """Load and cache the single CLIP model shared by all CLIP-based approaches."""
     if "model" in _clip:
         return _clip
-    model, _, preprocess = open_clip.create_model_and_transforms(model_name, pretrained=pretrained)
-    model = model.to(DEVICE).eval()
-    _clip.update(model=model, preprocess=preprocess,
-                 tokenizer=open_clip.get_tokenizer(model_name))
+    from transformers import CLIPModel, CLIPProcessor
+    model = CLIPModel.from_pretrained(model_name).to(DEVICE).eval()
+    processor = CLIPProcessor.from_pretrained(model_name)
+    _clip.update(model=model, processor=processor)
     return _clip
+
+
+def _normalize(emb):
+    return emb / emb.norm(dim=-1, keepdim=True)
 
 
 def _text_embeddings(texts):
     c = load_clip()
-    tokens = c["tokenizer"](texts).to(DEVICE)
+    inputs = c["processor"](text=list(texts), return_tensors="pt", padding=True, truncation=True)
+    inputs = {k: v.to(DEVICE) for k, v in inputs.items()}
     with torch.no_grad():
-        emb = c["model"].encode_text(tokens)
-    return emb / emb.norm(dim=-1, keepdim=True)
+        out = c["model"].get_text_features(**inputs)
+        # transformers <5 returns the projected tensor; >=5 returns a pooled
+        # output object that still needs the CLIP text projection applied.
+        emb = out if torch.is_tensor(out) else c["model"].text_projection(out.pooler_output)
+    return _normalize(emb)
 
 
 def _image_embedding(image):
     c = load_clip()
-    tensor = c["preprocess"](image).unsqueeze(0).to(DEVICE)
+    inputs = c["processor"](images=image, return_tensors="pt")
+    inputs = {k: v.to(DEVICE) for k, v in inputs.items()}
     with torch.no_grad():
-        emb = c["model"].encode_image(tensor)
-    return emb / emb.norm(dim=-1, keepdim=True)
+        out = c["model"].get_image_features(**inputs)
+        emb = out if torch.is_tensor(out) else c["model"].visual_projection(out.pooler_output)
+    return _normalize(emb)
 
 
 def _classify_by_similarity(query_emb, class_prompts):

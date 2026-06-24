@@ -1,33 +1,22 @@
-"""Full Wave Sonic (FWS) multi-image probe for GeoMM-Bench.
+"""Full Wave Sonic (FWS) multi-image approaches for GeoMM-Bench.
 
-This is the second of the benchmark's two probes. Where the model-breadth probe
-(baselines.py + optional_models.py) asks "do specialized vision models do better
-than CLIP?", this probe asks "does adding more visual modalities help?":
+The "does adding more visual modality help?" approaches of the benchmark:
 
-    text-only  ->  vision (logs)  ->  vision (logs + FWS)
-                   multimodal (text+logs)  ->  multimodal (text+logs+FWS)
+    vision (logs)            ->  vision (logs + FWS)
+    multimodal (text+logs)   ->  multimodal (text+logs+FWS)
 
-The verified pilot answer is NO: adding the Full Wave Sonic display and fusing
-modalities degrades macro-F1 rather than improving it (multimodal+FWS 0.103 vs
-text-only 0.746), evidence that the bottleneck is representational, not a lack
-of input data.
-
-Faithful to the executed GeoMM_Code.ipynb (OpenAI CLIP backbone). Model-free
-parts are importable without weights.
+These share the single CLIP backbone defined in baselines.py
+(``openai/clip-vit-base-patch32``) — they are not a separate model or backbone.
+The pilot answer is NO: adding the Full Wave Sonic display and fusing modalities
+degrades macro-F1 rather than improving it, evidence that the bottleneck is
+representational, not a lack of input data.
 """
 from __future__ import annotations
-
-import numpy as np
 
 from geomm_bench.baselines import (
     LITHOLOGY_CLASSES, TEXT_CLASS_PROMPTS, VISION_CLASS_PROMPTS,
     _text_embeddings, _image_embedding, _classify_by_similarity,
 )
-
-# GeoMM_Code uses the OpenAI CLIP backbone. The model-breadth probe uses
-# open-clip/LAION. Results from the two backbones are reported separately and
-# never merged into one row (see SOURCE_OF_TRUTH and the paper's methods).
-BACKBONE_NOTE = "FWS probe uses OpenAI clip-vit-base-patch32 (matches GeoMM_Code.ipynb)."
 
 
 def classify_vision_multi_image(images, class_prompts=VISION_CLASS_PROMPTS):
@@ -57,13 +46,3 @@ def classify_multimodal_multi_image(images, description,
     fused = {k: x / total for k, x in fused.items()}
     pred = max(fused, key=fused.get)
     return {"predicted": pred, "confidence": fused[pred], "probabilities": fused}
-
-
-# The five approaches of the FWS probe, in reporting order.
-FWS_PROBE_APPROACHES = [
-    "text_only",
-    "vision_logs",
-    "vision_logs_fws",
-    "multimodal_basic",
-    "multimodal_full_fws",
-]

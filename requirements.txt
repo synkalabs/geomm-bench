@@ -1,10 +1,10 @@
+# Core. All CLIP-based approaches share openai/clip-vit-base-patch32, loaded via
+# transformers, so transformers is required (not optional).
 torch>=2.0
-open-clip-torch>=2.20
+transformers>=4.35
 Pillow>=9.0
 numpy>=1.23
 matplotlib>=3.6
-# Vision approaches (optional):
+# Vision approaches additionally need the operator source PDFs (see DATASHEET.md)
+# and poppler for rasterization:
 pdf2image>=1.16
-# Grounding DINO and BLIP-2 (optional):
-transformers>=4.35
-scikit-learn>=1.2  # (only if you add GroupKFold splits)
