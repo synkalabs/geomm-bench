@@ -66,6 +66,6 @@ they are not precise population estimates. See the paper's Threats to Validity a
 Limitations sections.
 
 ## Maintenance
-Maintained by Synka Labs. Versioned per `CHANGELOG.md`; v0.2 added the FORCE 2020
+Maintained by Martin Masaba. Versioned per `CHANGELOG.md`; v0.2 added the FORCE 2020
 scaled track with well-level splits and confidence intervals. Issues and
 contributions via the project repository.
