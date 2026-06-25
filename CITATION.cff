@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use GeoMM-Bench, please cite both the benchmark software and the paper below."
 title: "GeoMM-Bench: a benchmark for multimodal AI on well log display interpretation"
 type: software
-version: 0.1.0
+version: 0.2.0
 authors:
   - given-names: Martin
     family-names: Masaba

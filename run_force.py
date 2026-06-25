@@ -26,6 +26,7 @@ from sklearn.model_selection import GroupKFold, cross_val_predict
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
+from geomm_bench import __version__
 from geomm_bench import baselines as B
 from geomm_bench import force as F
 from geomm_bench import metrics as M
@@ -57,7 +58,8 @@ def main():
     # Vision-only CLIP on the rendered display.
     vis_pred = [B.classify_vision_clip(F.render(iv["window"]))["predicted"] for iv in intervals]
 
-    doc = {"benchmark": "GeoMM-Bench", "track": "FORCE 2020 (scaled, rendered displays)",
+    doc = {"benchmark": "GeoMM-Bench", "version": __version__,
+           "track": "FORCE 2020 (scaled, rendered displays)",
            "n_wells": len(wells), "n_intervals": len(y),
            "class_distribution": {k: int(v) for k, v in Counter(y).items()},
            "metric": "macro_f1_present_classes", "results": {}}

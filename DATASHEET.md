@@ -1,4 +1,4 @@
-# Datasheet — GeoMM-Bench v0.1
+# GeoMM-Bench Datasheet (v0.2)
 
 Following the *Datasheets for Datasets* convention (Gebru et al.).
 
@@ -10,6 +10,12 @@ for vision-based lithofacies interpretation, alongside text-only petroleum
 benchmarks and numerical-log datasets.
 
 ## Composition
+GeoMM-Bench has two tracks as of v0.2. Track A is the Vilkyciai-22 pilot
+documented below. Track B is a scaled track built from the public FORCE 2020
+lithology dataset (Norwegian North Sea, over one hundred wells), where GeoMM-Bench
+renders synthetic displays from the curves. FORCE 2020 is open data, fetched
+separately, and is not redistributed here.
+
 - **Instances.** 11 labelled depth intervals from the Vilkyciai-22 well (Baltic
   Basin, Lithuania), 1975–2215 m TVD, 1:500 scale.
 - **Label.** One of four lithofacies: sandstone, shale, limestone, dolomite.
@@ -50,8 +56,8 @@ Vilkyciai-22 well; the pilot is too small for operational use.
 - **Not released:** the operator-provided source log/interpretation rasters,
   pending confirmation of redistribution rights. Users who hold equivalent
   displays can run the vision baselines by supplying `--logs-pdf`.
-- The FORCE 2020-based expansion (planned v0.2+) will be fully self-contained and
-  redistributable under that dataset's terms.
+- The v0.2 scaled track uses the public FORCE 2020 dataset, which is open data
+  fetched separately, together with the released renderer and numeric reference.
 
 ## Limitations
 Single well, single basin, 11 intervals, imbalanced classes, dolomite unlabelled.
@@ -60,6 +66,6 @@ they are not precise population estimates. See the paper's Threats to Validity a
 Limitations sections.
 
 ## Maintenance
-Maintained by Synka Labs. Versioned; v0.2 will add FORCE 2020 wells with
-well-level splits and confidence intervals. Issues and contributions via the
-project repository.
+Maintained by Synka Labs. Versioned per `CHANGELOG.md`; v0.2 added the FORCE 2020
+scaled track with well-level splits and confidence intervals. Issues and
+contributions via the project repository.

@@ -10,11 +10,11 @@ interpretations. The pilot evaluates
 lithofacies classification and documents a large gap between text-based and
 vision-based performance.
 
-> **Status: v0.1 pilot.** One well (Vilkyciai-22), 11 labelled intervals, four
-> lithofacies. A single CLIP backbone (`openai/clip-vit-base-patch32`) is used for
-> all CLIP approaches. Results establish the existence and approximate magnitude
-> of the text–vision gap, not precise population estimates. A FORCE 2020-based
-> expansion with well-level splits and confidence intervals is planned next.
+> **Status: v0.2.** Two tracks, real operator displays (Vilkyciai-22, 11 labelled
+> intervals) and rendered displays at scale (FORCE 2020, well-level splits and
+> bootstrap confidence intervals). A single CLIP backbone
+> (`openai/clip-vit-base-patch32`) is used for all CLIP approaches. The version is
+> set in `geomm_bench/__init__.py`; see `CHANGELOG.md` for what changed since v0.1.
 
 ## Results (pilot, n = 11)
 

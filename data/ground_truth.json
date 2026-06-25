@@ -1,6 +1,6 @@
 {
   "benchmark": "GeoMM-Bench",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "task": "lithofacies_classification",
   "description": "Pilot benchmark for evaluating multimodal AI on well log display interpretation.",
   "well": "Vilkyciai-22",

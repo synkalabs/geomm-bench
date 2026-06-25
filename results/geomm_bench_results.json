@@ -1,6 +1,6 @@
 {
   "benchmark": "GeoMM-Bench",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "well": "Vilkyciai-22",
   "n_intervals": 11,
   "backbone": "openai/clip-vit-base-patch32 (CLIP approaches); Grounding DINO + BLIP-2 are separate models",

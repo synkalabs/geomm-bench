@@ -1,5 +1,6 @@
 {
   "benchmark": "GeoMM-Bench",
+  "version": "0.2.0",
   "track": "FORCE 2020 (scaled, rendered displays)",
   "n_wells": 19,
   "n_intervals": 3664,
