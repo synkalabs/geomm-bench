@@ -2,8 +2,8 @@
 """Plot the FORCE 2020 scaled-track figure from results/force_results.json.
 
 Macro-F1 for the numeric reference and vision-CLIP, with 95% bootstrap
-confidence intervals as error bars and the random-baseline macro-F1 as a dashed
-line. Numbers are read straight from the results file, so the figure cannot drift.
+confidence intervals as error bars and the majority-class baseline macro-F1 as a
+dashed line. Numbers are read straight from the results file, so the figure cannot drift.
 
 Usage:
     python scripts/make_force_figure.py \
@@ -42,9 +42,10 @@ def make_figure(results_path, out_path):
     for x, v, h in zip(xs, f1, hi):
         ax.text(x, v + h + 0.02, f"{v:.2f}", ha="center", va="bottom",
                 fontsize=12, fontweight="bold")
-    ax.axhline(0.25, ls="--", color="#999", lw=1.3)
-    ax.text(len(labels) - 0.5, 0.26, "random baseline", ha="right", va="bottom",
-            fontsize=9, color="#999")
+    maj = doc.get("baselines", {}).get("majority_class", {}).get("macro_f1", 0.25)
+    ax.axhline(maj, ls="--", color="#999", lw=1.3)
+    ax.text(len(labels) - 0.5, maj + 0.01, "majority-class baseline", ha="right",
+            va="bottom", fontsize=9, color="#999")
     ax.set_ylim(0, 0.75)
     ax.set_ylabel("Macro F1-Score", fontsize=12, fontweight="bold")
     ax.set_xticks(list(xs))

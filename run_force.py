@@ -71,7 +71,7 @@ def main():
             "ci95": [round(lo, 3), round(hi, 3)],
             "per_class_f1": {k: round(v, 3) for k, v in pc.items()},
             "pred_distribution": {k: int(v) for k, v in Counter(pred).items()}}
-    doc["baselines"] = {"random_four_class_f1": 0.25}
+    doc["baselines"] = M.baseline_scores(y)
 
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
     with open(args.out, "w") as f:

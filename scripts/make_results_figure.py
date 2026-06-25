@@ -23,7 +23,6 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-RANDOM_BASELINE = 0.25
 COLORS = {"text": "#2E9E5B", "vision": "#E0524A", "multimodal": "#E8943A"}
 
 # (json_key, display label, modality group)
@@ -54,11 +53,15 @@ def make_figure(results_path, out_path):
     f1 = [_val(results, k, "macro_f1") for k, _, _ in LAYOUT]
     acc = [_val(results, k, "accuracy") for k, _, _ in LAYOUT]
 
+    maj = doc.get("baselines", {}).get("majority_class", {})
+    maj_f1 = maj.get("macro_f1", 0.25)
+    maj_acc = maj.get("accuracy", 0.25)
+
     fig, axes = plt.subplots(1, 2, figsize=(15, 5.2))
 
-    for ax, vals, title, ylab in (
-        (axes[0], f1, "(a) Macro F1-Score", "Macro F1-Score"),
-        (axes[1], acc, "(b) Accuracy", "Accuracy"),
+    for ax, vals, title, ylab, base in (
+        (axes[0], f1, "(a) Macro F1-Score", "Macro F1-Score", maj_f1),
+        (axes[1], acc, "(b) Accuracy", "Accuracy", maj_acc),
     ):
         xs = range(len(labels))
         plotted = [(v if v is not None else 0.0) for v in vals]
@@ -70,8 +73,8 @@ def make_figure(results_path, out_path):
             else:
                 ax.text(b.get_x() + b.get_width() / 2, v + 0.015, f"{v:.3f}",
                         ha="center", va="bottom", fontsize=10, fontweight="bold")
-        ax.axhline(RANDOM_BASELINE, ls="--", color="#999", lw=1.3)
-        ax.text(len(labels) - 0.5, RANDOM_BASELINE + 0.01, "Random baseline",
+        ax.axhline(base, ls="--", color="#999", lw=1.3)
+        ax.text(len(labels) - 0.5, base + 0.04, "majority class",
                 ha="right", va="bottom", fontsize=9, color="#999")
         ax.set_ylim(0, 1.0)
         ax.set_title(title, fontsize=13, fontweight="bold")

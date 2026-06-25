@@ -40,7 +40,7 @@ with the PDFs and live in `results/geomm_bench_results.json`.
 In the pilot, text classifies best (0.726 macro-F1). Every image-based approach is
 weaker: multimodal fusion (0.631) does not reach text, the pure-vision approaches
 trail further (0.278–0.324), grounding (0.205) and VQA (0.143) fall below the
-random-baseline F1, and adding Full Wave Sonic does not close the gap.
+majority-class baseline F1 (0.21), and adding Full Wave Sonic does not close the gap.
 
 ### Backbone sensitivity
 

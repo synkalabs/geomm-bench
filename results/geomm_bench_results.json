@@ -106,7 +106,16 @@
     }
   },
   "baselines": {
-    "random_four_class_f1": 0.25
+    "majority_class": {
+      "predict": "limestone",
+      "macro_f1": 0.208,
+      "accuracy": 0.455
+    },
+    "random_uniform": {
+      "macro_f1": 0.281,
+      "accuracy": 0.25,
+      "note": "expected value of predicting each class with probability 1/K"
+    }
   },
   "notes": [
     "vision-CLIP scores depend heavily on the CLIP backbone (see backbone_sensitivity), so vision results here should be read as unreliable rather than uniformly low."

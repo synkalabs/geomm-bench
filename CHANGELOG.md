@@ -28,6 +28,12 @@ Changed
   (0.726 macro-F1, falling to 0.398 when the label is redacted).
 - Pilot numbers are not comparable to v0.1, because the backbone and prompts
   changed.
+- Baselines are now computed from the label distribution rather than fixed at
+  0.25. The runners report a majority-class baseline and a uniform-random
+  baseline, each with macro-F1 and accuracy (`metrics.baseline_scores`). The
+  honest macro-F1 floor is the majority-class baseline (pilot 0.21, scaled track
+  0.20); the old 0.25 held only as uniform-random accuracy, not as a macro-F1
+  floor. Tables and figures use these computed values.
 
 Fixed
 - transformers 5.x compatibility. The CLIP image-embedding path now uses the

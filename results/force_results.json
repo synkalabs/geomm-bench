@@ -53,6 +53,15 @@
     }
   },
   "baselines": {
-    "random_four_class_f1": 0.25
+    "majority_class": {
+      "predict": "shale",
+      "macro_f1": 0.202,
+      "accuracy": 0.679
+    },
+    "random_uniform": {
+      "macro_f1": 0.178,
+      "accuracy": 0.25,
+      "note": "expected value of predicting each class with probability 1/K"
+    }
   }
 }

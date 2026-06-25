@@ -117,7 +117,7 @@ def build_doc(gt, log_pages=None, fws_pages=None, approaches=ALL_APPROACHES, sen
     if sensitivity:
         from geomm_bench.sensitivity import run_sensitivity
         doc["backbone_sensitivity"] = run_sensitivity(gt, log_pages)
-    doc["baselines"] = {"random_four_class_f1": 0.25}
+    doc["baselines"] = M.baseline_scores([g["lithology"] for g in gt])
     doc["notes"] = [CAVEAT]
     return doc
 
